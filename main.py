@@ -91,11 +91,25 @@ class WebBrowser(QMainWindow):
         # Keyboard Shortcuts
         self.add_shortcut(QKeySequence("Ctrl+T"), self.new_tab)
         self.add_shortcut(QKeySequence("Ctrl+W"), self.close_current_tab)  # Add Ctrl+W to close current tab
+        self.add_shortcut(QKeySequence("Ctrl+1"), lambda: self.switch_tab(0))
+        self.add_shortcut(QKeySequence("Ctrl+2"), lambda: self.switch_tab(1))
+        self.add_shortcut(QKeySequence("Ctrl+3"), lambda: self.switch_tab(2))
+        self.add_shortcut(QKeySequence("Ctrl+4"), lambda: self.switch_tab(3))
+        self.add_shortcut(QKeySequence("Ctrl+5"), lambda: self.switch_tab(4))
+        self.add_shortcut(QKeySequence("Ctrl+6"), lambda: self.switch_tab(5))
+        self.add_shortcut(QKeySequence("Ctrl+7"), lambda: self.switch_tab(6))
+        self.add_shortcut(QKeySequence("Ctrl+8"), lambda: self.switch_tab(7))
+        self.add_shortcut(QKeySequence("Ctrl+9"), lambda: self.switch_tab(8))
 
     def add_shortcut(self, key_sequence, callback):
         """Add a keyboard shortcut to trigger the provided callback."""
         shortcut = QShortcut(key_sequence, self)
         shortcut.activated.connect(callback)
+
+    def switch_tab(self, index):
+        """Switch to the tab corresponding to the index."""
+        if 0 <= index < self.tabs.count():
+            self.tabs.setCurrentIndex(index)
 
     def new_tab(self, url=None):
         tab = QWidget()
