@@ -1,12 +1,15 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLineEdit, QWidget, QTabWidget, QAction, QFileDialog, QToolBar, QComboBox, QListWidget, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLineEdit, QWidget, QTabWidget, QAction, QFileDialog, QToolBar, QComboBox, QListWidget, QShortcut
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineDownloadItem, QWebEngineProfile, QWebEnginePage
-from PyQt5.QtCore import QUrl, QTimer
+from PyQt5.QtCore import QUrl, Qt, QTimer, QSize
+from PyQt5.QtGui import QKeySequence  # Correct import here
 import sys, json, os
+
 
 class CustomWebEnginePage(QWebEnginePage):
     def __init__(self, profile, parent=None):
         super().__init__(parent)
         self.setProfile(profile)
+
 
 class WebBrowser(QMainWindow):
     def __init__(self):
@@ -85,6 +88,15 @@ class WebBrowser(QMainWindow):
 
         self.new_tab()
 
+        # Keyboard Shortcuts
+        self.add_shortcut(QKeySequence("Ctrl+T"), self.new_tab)
+        self.add_shortcut(QKeySequence("Ctrl+W"), self.close_current_tab)  # Add Ctrl+W to close current tab
+
+    def add_shortcut(self, key_sequence, callback):
+        """Add a keyboard shortcut to trigger the provided callback."""
+        shortcut = QShortcut(key_sequence, self)
+        shortcut.activated.connect(callback)
+
     def new_tab(self, url=None):
         tab = QWidget()
         layout = QVBoxLayout()
@@ -136,6 +148,12 @@ class WebBrowser(QMainWindow):
     def close_tab(self, index):
         if self.tabs.count() > 1:
             self.tabs.removeTab(index)
+
+    def close_current_tab(self):
+        """Close the currently selected tab with Ctrl+W"""
+        current_index = self.tabs.currentIndex()
+        if current_index != -1:
+            self.tabs.removeTab(current_index)
 
     def save_bookmark(self):
         current_browser = self.tabs.currentWidget().layout().itemAt(1).widget()
@@ -221,6 +239,7 @@ class WebBrowser(QMainWindow):
         layout.addWidget(self.download_list)
         self.download_window.setLayout(layout)
         self.download_window.show()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
