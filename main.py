@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLineEdit, QWidget, QTabWidget, QAction, QFileDialog, QToolBar, QComboBox, QListWidget, QShortcut
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineDownloadItem, QWebEngineProfile, QWebEnginePage
-from PyQt5.QtCore import QUrl, Qt, QTimer, QSize
+from PyQt5.QtCore import QUrl, Qt, QSize
 from PyQt5.QtGui import QKeySequence  # Correct import here
 import sys, json, os
 
@@ -84,6 +84,7 @@ class WebBrowser(QMainWindow):
         self.tabs = QTabWidget()
         self.tabs.setTabsClosable(True)
         self.tabs.tabCloseRequested.connect(self.close_tab)
+        self.tabs.setMovable(True)  # Allow tabs to be movable (drag-and-drop)
         self.setCentralWidget(self.tabs)
 
         self.new_tab()
